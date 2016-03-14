@@ -1,0 +1,10 @@
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\bin\Debug\HciDrawingProgram.exe.config
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\bin\Debug\HciDrawingProgram.exe
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\bin\Debug\HciDrawingProgram.pdb
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\obj\Debug\HciDrawingProgram.csprojResolveAssemblyReference.cache
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\obj\Debug\HciDrawingProgram.Form1.resources
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\obj\Debug\HciDrawingProgram.Properties.Resources.resources
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\obj\Debug\HciDrawingProgram.csproj.GenerateResource.Cache
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\obj\Debug\HciDrawingProgram.exe
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\obj\Debug\HciDrawingProgram.pdb
+c:\users\brap\documents\visual studio 2013\Projects\HciDrawingProgram\HciDrawingProgram\obj\Debug\HciDrawingProgram.Layer.resources
