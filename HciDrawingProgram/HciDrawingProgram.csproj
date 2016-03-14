@@ -48,7 +48,7 @@
     <Compile Include="Drawables\Ellipse.cs" />
     <Compile Include="Drawables\Freehand.cs" />
     <Compile Include="Drawables\Line.cs" />
-    <Compile Include="Drawables\Rectangle.cs" />
+    <Compile Include="Drawables\RectangleDrawable.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

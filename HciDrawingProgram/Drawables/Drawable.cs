@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HciDrawingProgram
 {
-    class Drawable
+    public class Drawable
     {
 
         public virtual void Draw(System.Windows.Forms.PaintEventArgs g) { }
@@ -15,5 +15,6 @@ namespace HciDrawingProgram
         public virtual void Update(int x, int y, Point prevPoint) { }
         public virtual void MouseDown(Pen _pen) { }
         public virtual void MouseUp() { }
+        public virtual void ConstrainProportions() { }
     }
 }

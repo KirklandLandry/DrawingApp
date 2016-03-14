@@ -33,35 +33,55 @@ namespace HciDrawingProgram
                 }
             }
         }
-        public bool render;
-        List<Drawable> drawables;
+        private bool Render;
+        public bool render
+        {
+            get { return Render; }
+            set { Render = value; }
+        }
+        private List<Drawable> drawables;
+
+        public void AddDrawable(Drawable drawable)
+        {
+            drawables.Add(drawable);
+        }
+        public Drawable GetDrawable(int i)
+        {
+            return drawables[i];
+        }
+        public int GetDrawablesCount()
+        {
+            return drawables.Count;
+        }
 
         public Layer(int _id, string name)
         {
             InitializeComponent();
             id = _id;
             Console.WriteLine(id);
-            render = true;
+            render = false;
             visibleCheckBox.Checked = true;
             drawables = new List<Drawable>();
             groupBox.Text = name;
         }
 
-        public void Render()
+        /*public void Render()
         {
             for (int i = 0; i < drawables.Count; i++)
             {
                 // draw it
             }
-        }
+        }*/
 
         private void visibleCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             render = !render;
+            if (visibleCheckBoxEvent != null)
+                visibleCheckBoxEvent(this, EventArgs.Empty);
         }
 
 
-        //public event EventHandler currentLayerCheckBoxChanged;
+        public event EventHandler visibleCheckBoxEvent;
         /*public void currentLayerCheckBoxChanged(object sender, EventArgs e)
         {
 
@@ -88,6 +108,20 @@ namespace HciDrawingProgram
         public void UnSetCurrentLayerCheckBox()
         {
             currentLayerCheckBox.Checked = false;
+        }
+
+        // this calls an event handler that will go and look for the missing 
+        // id in the list of layers and destroy all references to it
+        private void deleteLayerButton_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to delete this layer?", "Delete Layer Confirm", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                this.DestroyHandle();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+            }
         }
 
     }

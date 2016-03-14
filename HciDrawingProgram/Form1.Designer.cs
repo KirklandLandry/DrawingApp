@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.Label selectedColourLabel;
-            this.panel = new System.Windows.Forms.Panel();
             this.freehandButton = new System.Windows.Forms.Button();
             this.lineButton = new System.Windows.Forms.Button();
             this.rectangleButton = new System.Windows.Forms.Button();
@@ -43,8 +42,12 @@
             this.colourButton1 = new System.Windows.Forms.Button();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.polygonButton = new System.Windows.Forms.Button();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.brushWidthSlider = new System.Windows.Forms.Label();
             selectedColourLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // selectedColourLabel
@@ -55,18 +58,6 @@
             selectedColourLabel.Size = new System.Drawing.Size(37, 13);
             selectedColourLabel.TabIndex = 12;
             selectedColourLabel.Text = "Colour";
-            // 
-            // panel
-            // 
-            this.panel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel.Location = new System.Drawing.Point(853, 155);
-            this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(38, 35);
-            this.panel.TabIndex = 0;
-            this.panel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
-            this.panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            this.panel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
-            this.panel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
             // 
             // freehandButton
             // 
@@ -168,9 +159,9 @@
             // 
             // colourButton1
             // 
-            this.colourButton1.Location = new System.Drawing.Point(785, 193);
+            this.colourButton1.Location = new System.Drawing.Point(781, 193);
             this.colourButton1.Name = "colourButton1";
-            this.colourButton1.Size = new System.Drawing.Size(18, 23);
+            this.colourButton1.Size = new System.Drawing.Size(22, 23);
             this.colourButton1.TabIndex = 11;
             this.colourButton1.UseVisualStyleBackColor = true;
             this.colourButton1.Click += new System.EventHandler(this.colourButton1_Click);
@@ -188,11 +179,38 @@
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
             // 
+            // polygonButton
+            // 
+            this.polygonButton.Location = new System.Drawing.Point(745, 130);
+            this.polygonButton.Name = "polygonButton";
+            this.polygonButton.Size = new System.Drawing.Size(73, 23);
+            this.polygonButton.TabIndex = 14;
+            this.polygonButton.Text = "polygon";
+            this.polygonButton.UseVisualStyleBackColor = true;
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(825, 171);
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(104, 45);
+            this.trackBar1.TabIndex = 15;
+            // 
+            // brushWidthSlider
+            // 
+            this.brushWidthSlider.AutoSize = true;
+            this.brushWidthSlider.Location = new System.Drawing.Point(847, 203);
+            this.brushWidthSlider.Name = "brushWidthSlider";
+            this.brushWidthSlider.Size = new System.Drawing.Size(61, 13);
+            this.brushWidthSlider.TabIndex = 16;
+            this.brushWidthSlider.Text = "brush width";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(972, 596);
+            this.ClientSize = new System.Drawing.Size(956, 596);
+            this.Controls.Add(this.brushWidthSlider);
+            this.Controls.Add(this.polygonButton);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(selectedColourLabel);
             this.Controls.Add(this.colourButton1);
@@ -206,11 +224,12 @@
             this.Controls.Add(this.rectangleButton);
             this.Controls.Add(this.lineButton);
             this.Controls.Add(this.freehandButton);
-            this.Controls.Add(this.panel);
+            this.Controls.Add(this.trackBar1);
             this.DoubleBuffered = true;
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -218,7 +237,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel;
         private System.Windows.Forms.Button freehandButton;
         private System.Windows.Forms.Button lineButton;
         private System.Windows.Forms.Button rectangleButton;
@@ -232,6 +250,9 @@
         private System.Windows.Forms.Button colourButton1;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button polygonButton;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Label brushWidthSlider;
     }
 }
 

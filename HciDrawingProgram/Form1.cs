@@ -102,30 +102,38 @@ namespace HciDrawingProgram
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
-            mouseDown = true;
-
-            switch (drawMode)
+            if (layers[currentActiveIndex].render)
             {
-                case DrawMode.freehand:
-                    currentDrawable = new Freehand();
-                    break;
-                case DrawMode.line:
-                    currentDrawable = new Line();
-                    break;
-                case DrawMode.rectangle:
-                    currentDrawable = new RectangleDrawable();
-                    break;
-
+                mouseDown = true;
+                switch (drawMode)
+                {
+                    case DrawMode.freehand:
+                        currentDrawable = new Freehand();
+                        break;
+                    case DrawMode.line:
+                        currentDrawable = new Line();
+                        break;
+                    case DrawMode.rectangle:
+                        currentDrawable = new RectangleDrawable(constrainRectangleProportionsCheckbox.Checked);
+                        break;
+                    case DrawMode.ellipse:
+                        currentDrawable = new Ellipse(constrainEllipseProportionsCheckbox.Checked);
+                        break;
+                }
+                currentDrawable.MouseDown(leftClickPen);
             }
-            currentDrawable.MouseDown(leftClickPen);  
         }
 
 
         private void panel1_MouseUp(object sender, MouseEventArgs e)
         {
-            mouseDown = false;
-            currentDrawable.MouseUp();
-            drawables.Add(currentDrawable);
+            if (layers[currentActiveIndex].render)
+            {
+                mouseDown = false;
+                currentDrawable.MouseUp();
+                //drawables.Add(currentDrawable);
+                layers[currentActiveIndex].AddDrawable(currentDrawable);
+            }
         }
 
         Point prevPt;
@@ -134,7 +142,7 @@ namespace HciDrawingProgram
         //Pen RightClickPen = new Pen(System.Drawing.Color.Black, 4); // not sure if I want to use this for eraser or second colour
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
-            if(mouseDown)
+            if(mouseDown &&(layers[currentActiveIndex].render))
             {
                 currentDrawable.Update(e.X, e.Y, prevPt);
                 pictureBox1.Refresh();
@@ -195,16 +203,26 @@ namespace HciDrawingProgram
 
         private void panel_Paint(object sender, PaintEventArgs e)
         {
-            for (int i = 0; i < drawables.Count; i++)
+            for (int n = 0; n < layers.Count; n++)
             {
-                drawables[i].Draw(e);
+                if (layers[n].render)
+                {
+                    for (int i = 0; i < layers[n].GetDrawablesCount(); i++)
+                    {
+                        layers[n].GetDrawable(i).Draw(e);
+                    }
+                }
             }
-            try
+            if (layers[currentActiveIndex].render)
             {
-                if(currentDrawable != null)
-                    currentDrawable.Draw(e);
+                try
+                {
+                    if (currentDrawable != null)
+                        currentDrawable.Draw(e);
+                }
+                catch { }
             }
-            catch{ }
+
         }
 
         private void addLayerButton_Click(object sender, EventArgs e)
@@ -229,6 +247,7 @@ namespace HciDrawingProgram
             a.currentActiveLayer = true;
             flowLayoutPanel1.ScrollControlIntoView(a);
 
+            a.visibleCheckBoxEvent += HandleVisibleCheckBoxEvent;
         }
 
         private void colourButton1_Click(object sender, EventArgs e)
@@ -239,7 +258,11 @@ namespace HciDrawingProgram
         }
 
 
+        void HandleVisibleCheckBoxEvent(object o, EventArgs e)
+        {
+            pictureBox1.Refresh();
 
+        }
 
 
 

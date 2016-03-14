@@ -32,6 +32,7 @@
             this.visibleCheckBox = new System.Windows.Forms.CheckBox();
             this.currentLayerCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox = new System.Windows.Forms.GroupBox();
+            this.deleteLayerButton = new System.Windows.Forms.Button();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,13 +70,25 @@
             // groupBox
             // 
             this.groupBox.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox.Controls.Add(this.deleteLayerButton);
             this.groupBox.Controls.Add(this.visibleCheckBox);
             this.groupBox.Controls.Add(this.currentLayerCheckBox);
             this.groupBox.Location = new System.Drawing.Point(3, 3);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(103, 65);
+            this.groupBox.Size = new System.Drawing.Size(180, 65);
             this.groupBox.TabIndex = 4;
             this.groupBox.TabStop = false;
+            // 
+            // deleteLayerButton
+            // 
+            this.deleteLayerButton.BackColor = System.Drawing.Color.LightCoral;
+            this.deleteLayerButton.Location = new System.Drawing.Point(125, 16);
+            this.deleteLayerButton.Name = "deleteLayerButton";
+            this.deleteLayerButton.Size = new System.Drawing.Size(49, 40);
+            this.deleteLayerButton.TabIndex = 3;
+            this.deleteLayerButton.Text = "Delete Layer";
+            this.deleteLayerButton.UseVisualStyleBackColor = false;
+            this.deleteLayerButton.Click += new System.EventHandler(this.deleteLayerButton_Click);
             // 
             // Layer
             // 
@@ -84,7 +97,7 @@
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.label1);
             this.Name = "Layer";
-            this.Size = new System.Drawing.Size(109, 76);
+            this.Size = new System.Drawing.Size(186, 76);
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -98,5 +111,6 @@
         private System.Windows.Forms.CheckBox visibleCheckBox;
         private System.Windows.Forms.CheckBox currentLayerCheckBox;
         private System.Windows.Forms.GroupBox groupBox;
+        private System.Windows.Forms.Button deleteLayerButton;
     }
 }
