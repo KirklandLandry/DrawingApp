@@ -13,6 +13,7 @@ namespace HciDrawingProgram
     public partial class Layer : UserControl
     {
         public int id;
+        public bool deleteFlag;
         private bool CurrentActiveLayer; // if it's currently the active draw layer;
         public bool currentActiveLayer
         {
@@ -63,6 +64,7 @@ namespace HciDrawingProgram
             visibleCheckBox.Checked = true;
             drawables = new List<Drawable>();
             groupBox.Text = name;
+            deleteFlag = false;
         }
 
         /*public void Render()
@@ -112,16 +114,25 @@ namespace HciDrawingProgram
 
         // this calls an event handler that will go and look for the missing 
         // id in the list of layers and destroy all references to it
+        public event EventHandler listenOnDeleteLayerButton_Click;
         private void deleteLayerButton_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to delete this layer?", "Delete Layer Confirm", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                this.DestroyHandle();
+                deleteFlag = true;
+                if (listenOnDeleteLayerButton_Click != null)
+                    listenOnDeleteLayerButton_Click(this, EventArgs.Empty);
+                //this.DestroyHandle();
             }
             else if (dialogResult == DialogResult.No)
             {
             }
+        }
+
+        public void DestroyEvent()
+        {
+            // cleanup and destory this layer
         }
 
     }

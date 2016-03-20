@@ -13,6 +13,12 @@ namespace HciDrawingProgram
 {
     public partial class Form1 : Form
     {
+
+        // BUG: most recent object drawn sometimes gets messed up on the layers
+        // disappears or not on any layer
+        // or on the wrong layer (draw, add layer -> it's on the new layer)
+        // this must be because of the add order 
+
         List<Layer> layers;
         List<Drawable> drawables;
         Drawable currentDrawable;
@@ -90,6 +96,11 @@ namespace HciDrawingProgram
             Update(DrawMode.ellipse);
         }
 
+        private void moveButton_Click(object sender, EventArgs e)
+        {
+            Update(DrawMode.move);
+        }
+
         private void constrainRectangleProportionsCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             constrainRectangleProportions = !constrainRectangleProportions;
@@ -119,20 +130,25 @@ namespace HciDrawingProgram
                     case DrawMode.ellipse:
                         currentDrawable = new Ellipse(constrainEllipseProportionsCheckbox.Checked);
                         break;
+                    case DrawMode.move:
+
+                        break;
                 }
-                currentDrawable.MouseDown(leftClickPen);
+                if(drawMode != DrawMode.move)
+                    currentDrawable.MouseDown(leftClickPen);
             }
         }
 
 
         private void panel1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (layers[currentActiveIndex].render)
+            if (layers[currentActiveIndex].render & drawMode != DrawMode.move)
             {
                 mouseDown = false;
                 currentDrawable.MouseUp();
                 //drawables.Add(currentDrawable);
                 layers[currentActiveIndex].AddDrawable(currentDrawable);
+                currentDrawable = null;
             }
         }
 
@@ -142,7 +158,7 @@ namespace HciDrawingProgram
         //Pen RightClickPen = new Pen(System.Drawing.Color.Black, 4); // not sure if I want to use this for eraser or second colour
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
-            if(mouseDown &&(layers[currentActiveIndex].render))
+            if(mouseDown && (layers[currentActiveIndex].render) && drawMode != DrawMode.move)
             {
                 currentDrawable.Update(e.X, e.Y, prevPt);
                 pictureBox1.Refresh();
@@ -158,6 +174,7 @@ namespace HciDrawingProgram
             drawMode = _drawMode;
         }
 
+        #region CHANGE BUTTON COLOURS
         void RemoveButtonColour()
         {
             switch (drawMode)
@@ -173,6 +190,9 @@ namespace HciDrawingProgram
                     break;
                 case DrawMode.ellipse:
                     ellipseButton.BackColor = default(Color);
+                    break;
+                case DrawMode.move:
+                    moveButton.BackColor = default(Color);
                     break;
             }
         }
@@ -197,9 +217,13 @@ namespace HciDrawingProgram
                 case DrawMode.ellipse:
                     ellipseButton.BackColor = Color.LightSeaGreen;
                     break;
+                case DrawMode.move:
+                    moveButton.BackColor = Color.LightSeaGreen;
+                    break;
             }
             return true;
         }
+        #endregion 
 
         private void panel_Paint(object sender, PaintEventArgs e)
         {
@@ -246,7 +270,7 @@ namespace HciDrawingProgram
             currentActiveIndex = layerCount - 1;
             a.currentActiveLayer = true;
             flowLayoutPanel1.ScrollControlIntoView(a);
-
+            a.listenOnDeleteLayerButton_Click += Handle_DeleteLayerButton_ClickEvent;
             a.visibleCheckBoxEvent += HandleVisibleCheckBoxEvent;
         }
 
@@ -265,6 +289,32 @@ namespace HciDrawingProgram
         }
 
 
+
+        void Handle_DeleteLayerButton_ClickEvent(object o, EventArgs e)
+        {
+            Console.WriteLine("ha");
+            if (layers.Count <= 1) // this isn't really working. need to change all this indexing stuff to be less messy
+            {
+                // can't delete the only layer
+            }
+            else
+            {
+                for (int i = 0; i < layers.Count; i++)
+                {
+                    if (layers[i].deleteFlag)
+                    {
+                        // call the layer's DestroyEvent() function
+                        layers.RemoveAt(i);
+                        if (currentActiveIndex == 0)
+                            currentActiveIndex++;
+                        else
+                            currentActiveIndex--;
+                        layerCount--;
+                        pictureBox1.Refresh();
+                    }
+                }
+            }
+        }
 
 
 

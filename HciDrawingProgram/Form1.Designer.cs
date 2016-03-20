@@ -45,6 +45,7 @@
             this.polygonButton = new System.Windows.Forms.Button();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.brushWidthSlider = new System.Windows.Forms.Label();
+            this.moveButton = new System.Windows.Forms.Button();
             selectedColourLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -204,11 +205,22 @@
             this.brushWidthSlider.TabIndex = 16;
             this.brushWidthSlider.Text = "brush width";
             // 
+            // moveButton
+            // 
+            this.moveButton.Location = new System.Drawing.Point(833, 13);
+            this.moveButton.Name = "moveButton";
+            this.moveButton.Size = new System.Drawing.Size(75, 23);
+            this.moveButton.TabIndex = 17;
+            this.moveButton.Text = "move";
+            this.moveButton.UseVisualStyleBackColor = true;
+            this.moveButton.Click += new System.EventHandler(this.moveButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(956, 596);
+            this.Controls.Add(this.moveButton);
             this.Controls.Add(this.brushWidthSlider);
             this.Controls.Add(this.polygonButton);
             this.Controls.Add(this.pictureBox1);
@@ -253,6 +265,7 @@
         private System.Windows.Forms.Button polygonButton;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label brushWidthSlider;
+        private System.Windows.Forms.Button moveButton;
     }
 }
 
