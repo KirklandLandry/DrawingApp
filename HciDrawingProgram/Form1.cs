@@ -19,11 +19,9 @@ namespace HciDrawingProgram
         // or on the wrong layer (draw, add layer -> it's on the new layer)
         // this must be because of the add order 
 
-        List<Layer> layers;
-        List<Drawable> drawables;
-        Drawable currentDrawable;
+        DrawManager drawManager;
 
-        int layerCount;
+        
         public Form1()
         {
             InitializeComponent();
@@ -31,20 +29,15 @@ namespace HciDrawingProgram
             freehandButton.BackColor = Color.LightSeaGreen;
             constrainEllipseProportions = false;
             constrainRectangleProportions = false;
-            mouseDown = false;
 
-
-            drawables = new List<Drawable>();
+            drawManager = new DrawManager();
+            
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
 
-            layerCount = 0;
-            layers = new List<Layer>();
+            
 
             colourButton1.BackColor = Color.Black;
-
-            currentActiveIndex = 0;
-
 
 
             AddLayer("Base Layer");
@@ -58,13 +51,11 @@ namespace HciDrawingProgram
         }
 
 
-        int currentActiveIndex;
+        
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             Console.WriteLine(comboBox1.SelectedIndex);
-            layers[currentActiveIndex].currentActiveLayer = false;
-            layers[comboBox1.SelectedIndex].currentActiveLayer = true;
-            currentActiveIndex = comboBox1.SelectedIndex;
+            drawManager.ChangeLayer(comboBox1.SelectedIndex);
         }
 
 
@@ -73,9 +64,8 @@ namespace HciDrawingProgram
 
         bool constrainEllipseProportions;
         bool constrainRectangleProportions;
-        bool mouseDown;
 
-
+        #region BUTTON CLICK EVENTS
         private void freehandButton_Click(object sender, EventArgs e)
         {
             Update(DrawMode.freehand);
@@ -101,6 +91,22 @@ namespace HciDrawingProgram
             Update(DrawMode.move);
         }
 
+        private void addLayerButton_Click(object sender, EventArgs e)
+        {
+            AddLayer(addLayerTextbox.Text);
+            addLayerTextbox.Text = "";
+        }
+
+        private void colourButton1_Click(object sender, EventArgs e)
+        {
+            DialogResult result = colorDialog1.ShowDialog();
+            colourButton1.BackColor = colorDialog1.Color;
+            drawManager.leftClickPen.Color = colorDialog1.Color;
+        }
+        #endregion 
+
+
+
         private void constrainRectangleProportionsCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             constrainRectangleProportions = !constrainRectangleProportions;
@@ -113,57 +119,21 @@ namespace HciDrawingProgram
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (layers[currentActiveIndex].render)
-            {
-                mouseDown = true;
-                switch (drawMode)
-                {
-                    case DrawMode.freehand:
-                        currentDrawable = new Freehand();
-                        break;
-                    case DrawMode.line:
-                        currentDrawable = new Line();
-                        break;
-                    case DrawMode.rectangle:
-                        currentDrawable = new RectangleDrawable(constrainRectangleProportionsCheckbox.Checked);
-                        break;
-                    case DrawMode.ellipse:
-                        currentDrawable = new Ellipse(constrainEllipseProportionsCheckbox.Checked);
-                        break;
-                    case DrawMode.move:
-
-                        break;
-                }
-                if(drawMode != DrawMode.move)
-                    currentDrawable.MouseDown(leftClickPen);
-            }
+            drawManager.MouseDown(drawMode, constrainRectangleProportionsCheckbox.Checked, constrainEllipseProportionsCheckbox.Checked);
         }
 
 
         private void panel1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (layers[currentActiveIndex].render & drawMode != DrawMode.move)
-            {
-                mouseDown = false;
-                currentDrawable.MouseUp();
-                //drawables.Add(currentDrawable);
-                layers[currentActiveIndex].AddDrawable(currentDrawable);
-                currentDrawable = null;
-            }
+            drawManager.MouseUp(drawMode);
         }
 
-        Point prevPt;
 
-        Pen leftClickPen = new Pen(System.Drawing.Color.Black, 4);
         //Pen RightClickPen = new Pen(System.Drawing.Color.Black, 4); // not sure if I want to use this for eraser or second colour
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
-            if(mouseDown && (layers[currentActiveIndex].render) && drawMode != DrawMode.move)
-            {
-                currentDrawable.Update(e.X, e.Y, prevPt);
-                pictureBox1.Refresh();
-            }
-            prevPt = new Point(e.X, e.Y);
+            drawManager.MouseMove(e, drawMode);
+            pictureBox1.Refresh();
         }
 
 
@@ -227,59 +197,30 @@ namespace HciDrawingProgram
 
         private void panel_Paint(object sender, PaintEventArgs e)
         {
-            for (int n = 0; n < layers.Count; n++)
-            {
-                if (layers[n].render)
-                {
-                    for (int i = 0; i < layers[n].GetDrawablesCount(); i++)
-                    {
-                        layers[n].GetDrawable(i).Draw(e);
-                    }
-                }
-            }
-            if (layers[currentActiveIndex].render)
-            {
-                try
-                {
-                    if (currentDrawable != null)
-                        currentDrawable.Draw(e);
-                }
-                catch { }
-            }
-
+            drawManager.Paint(e);
         }
 
-        private void addLayerButton_Click(object sender, EventArgs e)
-        {
-            AddLayer(addLayerTextbox.Text);
-            addLayerTextbox.Text = "";
-        }
+
 
         void AddLayer(string name)
         {
-            if(name == "")
-                name = "Layer " + layerCount;
-            comboBox1.Items.Add(name);
 
-            Layer a = new Layer(layerCount++, name);
-            a.Visible = true;
+            Layer a = drawManager.addLayer(name);
+            comboBox1.Items.Add(drawManager.lastLayerAddedName);
+
+
             flowLayoutPanel1.Controls.Add(a);
-            layers.Add(a);
+            
 
-            layers[currentActiveIndex].currentActiveLayer = false;
-            currentActiveIndex = layerCount - 1;
+
             a.currentActiveLayer = true;
-            flowLayoutPanel1.ScrollControlIntoView(a);
             a.listenOnDeleteLayerButton_Click += Handle_DeleteLayerButton_ClickEvent;
             a.visibleCheckBoxEvent += HandleVisibleCheckBoxEvent;
+            flowLayoutPanel1.ScrollControlIntoView(a);
+
         }
 
-        private void colourButton1_Click(object sender, EventArgs e)
-        {
-            DialogResult result = colorDialog1.ShowDialog();
-            colourButton1.BackColor = colorDialog1.Color;
-            leftClickPen.Color = colorDialog1.Color;
-        }
+
 
 
         void HandleVisibleCheckBoxEvent(object o, EventArgs e)
@@ -292,31 +233,14 @@ namespace HciDrawingProgram
 
         void Handle_DeleteLayerButton_ClickEvent(object o, EventArgs e)
         {
-            Console.WriteLine("ha");
-            if (layers.Count <= 1) // this isn't really working. need to change all this indexing stuff to be less messy
-            {
-                // can't delete the only layer
-            }
-            else
-            {
-                for (int i = 0; i < layers.Count; i++)
-                {
-                    if (layers[i].deleteFlag)
-                    {
-                        // call the layer's DestroyEvent() function
-                        layers.RemoveAt(i);
-                        if (currentActiveIndex == 0)
-                            currentActiveIndex++;
-                        else
-                            currentActiveIndex--;
-                        layerCount--;
-                        pictureBox1.Refresh();
-                    }
-                }
-            }
+            drawManager.DeleteLayer();
+            pictureBox1.Refresh();
         }
 
+        void RefreshView()
+        {
 
+        }
 
     }
 }
