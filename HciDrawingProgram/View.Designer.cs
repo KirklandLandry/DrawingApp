@@ -1,6 +1,6 @@
 ﻿namespace HciDrawingProgram
 {
-    partial class Form1
+    partial class View
     {
         /// <summary>
         /// Required designer variable.
@@ -36,18 +36,18 @@
             this.constrainRectangleProportionsCheckbox = new System.Windows.Forms.CheckBox();
             this.constrainEllipseProportionsCheckbox = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.layerCombobox = new System.Windows.Forms.ComboBox();
             this.addLayerButton = new System.Windows.Forms.Button();
             this.addLayerTextbox = new System.Windows.Forms.TextBox();
-            this.colourButton1 = new System.Windows.Forms.Button();
+            this.colourButton = new System.Windows.Forms.Button();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.canvas = new System.Windows.Forms.PictureBox();
             this.polygonButton = new System.Windows.Forms.Button();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.brushWidthSlider = new System.Windows.Forms.Label();
             this.moveButton = new System.Windows.Forms.Button();
             selectedColourLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -132,14 +132,14 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 309);
             this.flowLayoutPanel1.TabIndex = 7;
             // 
-            // comboBox1
+            // layerCombobox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(742, 248);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(199, 21);
-            this.comboBox1.TabIndex = 8;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.layerCombobox.FormattingEnabled = true;
+            this.layerCombobox.Location = new System.Drawing.Point(742, 248);
+            this.layerCombobox.Name = "layerCombobox";
+            this.layerCombobox.Size = new System.Drawing.Size(199, 21);
+            this.layerCombobox.TabIndex = 8;
+            this.layerCombobox.SelectedIndexChanged += new System.EventHandler(this.layerCombobox_SelectedIndexChanged);
             // 
             // addLayerButton
             // 
@@ -158,27 +158,27 @@
             this.addLayerTextbox.Size = new System.Drawing.Size(133, 20);
             this.addLayerTextbox.TabIndex = 10;
             // 
-            // colourButton1
+            // colourButton
             // 
-            this.colourButton1.Location = new System.Drawing.Point(781, 193);
-            this.colourButton1.Name = "colourButton1";
-            this.colourButton1.Size = new System.Drawing.Size(22, 23);
-            this.colourButton1.TabIndex = 11;
-            this.colourButton1.UseVisualStyleBackColor = true;
-            this.colourButton1.Click += new System.EventHandler(this.colourButton1_Click);
+            this.colourButton.Location = new System.Drawing.Point(781, 193);
+            this.colourButton.Name = "colourButton";
+            this.colourButton.Size = new System.Drawing.Size(22, 23);
+            this.colourButton.TabIndex = 11;
+            this.colourButton.UseVisualStyleBackColor = true;
+            this.colourButton.Click += new System.EventHandler(this.colourButton1_Click);
             // 
-            // pictureBox1
+            // canvas
             // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(725, 572);
-            this.pictureBox1.TabIndex = 13;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
+            this.canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.canvas.Location = new System.Drawing.Point(12, 12);
+            this.canvas.Name = "canvas";
+            this.canvas.Size = new System.Drawing.Size(725, 572);
+            this.canvas.TabIndex = 13;
+            this.canvas.TabStop = false;
+            this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.canvas_Paint);
+            this.canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseDown);
+            this.canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseMove);
+            this.canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseUp);
             // 
             // polygonButton
             // 
@@ -188,6 +188,7 @@
             this.polygonButton.TabIndex = 14;
             this.polygonButton.Text = "polygon";
             this.polygonButton.UseVisualStyleBackColor = true;
+            this.polygonButton.Click += new System.EventHandler(this.polygonButton_Click);
             // 
             // trackBar1
             // 
@@ -215,20 +216,21 @@
             this.moveButton.UseVisualStyleBackColor = true;
             this.moveButton.Click += new System.EventHandler(this.moveButton_Click);
             // 
-            // Form1
+            // View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(956, 596);
             this.Controls.Add(this.moveButton);
             this.Controls.Add(this.brushWidthSlider);
             this.Controls.Add(this.polygonButton);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.canvas);
             this.Controls.Add(selectedColourLabel);
-            this.Controls.Add(this.colourButton1);
+            this.Controls.Add(this.colourButton);
             this.Controls.Add(this.addLayerTextbox);
             this.Controls.Add(this.addLayerButton);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.layerCombobox);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.constrainEllipseProportionsCheckbox);
             this.Controls.Add(this.constrainRectangleProportionsCheckbox);
@@ -238,9 +240,10 @@
             this.Controls.Add(this.freehandButton);
             this.Controls.Add(this.trackBar1);
             this.DoubleBuffered = true;
-            this.Name = "Form1";
-            this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "View";
+            this.Text = "Drawing App";
+            ((System.ComponentModel.ISupportInitialize)(this.canvas)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -256,12 +259,12 @@
         private System.Windows.Forms.CheckBox constrainRectangleProportionsCheckbox;
         private System.Windows.Forms.CheckBox constrainEllipseProportionsCheckbox;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox layerCombobox;
         private System.Windows.Forms.Button addLayerButton;
         private System.Windows.Forms.TextBox addLayerTextbox;
-        private System.Windows.Forms.Button colourButton1;
+        private System.Windows.Forms.Button colourButton;
         private System.Windows.Forms.ColorDialog colorDialog1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox canvas;
         private System.Windows.Forms.Button polygonButton;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label brushWidthSlider;

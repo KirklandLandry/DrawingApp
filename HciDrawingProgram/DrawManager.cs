@@ -15,7 +15,7 @@ namespace HciDrawingProgram
         List<Layer> layers;
         Drawable currentDrawable;
 
-        int currentActiveIndex;
+        public int currentActiveIndex;
         int layerCount;
         bool mouseDown;
 
@@ -34,9 +34,10 @@ namespace HciDrawingProgram
 
         public void MouseDown(DrawMode drawMode, bool constrainRectangle, bool constrainEllipse)
         {
+            mouseDown = true;
             if (layers[currentActiveIndex].render)
             {
-                mouseDown = true;
+                
                 switch (drawMode)
                 {
                     case DrawMode.freehand:
@@ -51,12 +52,15 @@ namespace HciDrawingProgram
                     case DrawMode.ellipse:
                         currentDrawable = new Ellipse(constrainEllipse);
                         break;
+                    case DrawMode.polygon:
+                        currentDrawable = new Polygon();
+                        break;
                     case DrawMode.move:
 
                         break;
                 }
                 if (drawMode != DrawMode.move)
-                    currentDrawable.MouseDown(leftClickPen);
+                    currentDrawable.LeftMouseDown(leftClickPen);
             }
         }
 
@@ -65,12 +69,13 @@ namespace HciDrawingProgram
         {
             if (layers[currentActiveIndex].render & drawMode != DrawMode.move)
             {
-                mouseDown = false;
-                currentDrawable.MouseUp();
+                
+                currentDrawable.LeftMouseUp();
                 //drawables.Add(currentDrawable);
                 layers[currentActiveIndex].AddDrawable(currentDrawable);
                 currentDrawable = null;
             }
+            mouseDown = false;
         }
 
         public void MouseMove(MouseEventArgs e, DrawMode drawMode)
@@ -107,30 +112,32 @@ namespace HciDrawingProgram
             }
         }
 
-        public void DeleteLayer()
+        public int DeleteLayer()
         {
-            Console.WriteLine("ha");
             if (layers.Count <= 1) // this isn't really working. need to change all this indexing stuff to be less messy
             {
                 // can't delete the only layer
             }
             else
             {
-                for (int i = 0; i < layers.Count; i++)
+                int tempCount = layers.Count;
+                for (int i = 0; i < tempCount; i++)
                 {
                     if (layers[i].deleteFlag)
                     {
                         // call the layer's DestroyEvent() function
                         layers.RemoveAt(i);
                         if (currentActiveIndex == 0)
-                            currentActiveIndex++;
+                            currentActiveIndex = 0;//++;
                         else
                             currentActiveIndex--;
-                        layerCount--;
+                        //layerCount--;
+                        return i;
                         //pictureBox1.Refresh();
                     }
                 }
             }
+            return -1;
         }
 
         public void ChangeLayer(int selectedComboboxIndex)
@@ -153,7 +160,7 @@ namespace HciDrawingProgram
             layers.Add(a);
 
             layers[currentActiveIndex].currentActiveLayer = false;
-            currentActiveIndex = layerCount - 1;
+            currentActiveIndex = layers.Count - 1;
 
 
             return a;

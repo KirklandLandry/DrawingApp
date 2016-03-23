@@ -13,8 +13,8 @@ namespace HciDrawingProgram
         public virtual void Draw(System.Windows.Forms.PaintEventArgs g) { }
         //public virtual void Draw(Graphics g, Pen pen) { }
         public virtual void Update(int x, int y, Point prevPoint) { }
-        public virtual void MouseDown(Pen _pen) { }
-        public virtual void MouseUp() { }
+        public virtual void LeftMouseDown(Pen _pen) { }
+        public virtual void LeftMouseUp() { }
         public virtual void ConstrainProportions() { }
     }
 }

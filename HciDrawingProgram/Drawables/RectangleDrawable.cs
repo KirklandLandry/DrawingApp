@@ -70,12 +70,12 @@ namespace HciDrawingProgram.Drawables
                     g.Graphics.DrawRectangle(pen, end.X, end.Y, start.X - end.X, start.Y - end.Y);
             }
         }
-        public override void MouseDown(Pen _pen)
+        public override void LeftMouseDown(Pen _pen)
         {
             constrainProportions = false;
             pen = new Pen(_pen.Color, _pen.Width);
         }
-        public override void MouseUp() { }
+        public override void LeftMouseUp() { }
         public override void ConstrainProportions() 
         {
             constrainProportions = !constrainProportions;

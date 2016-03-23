@@ -10,9 +10,11 @@ namespace HciDrawingProgram.Drawables
     class Ellipse : Drawable
     {
         bool constrainProportions;
-        Point start = new Point(-1, -1);
+        Point start;// = new Point(-1, -1);
         Point end;
         Pen pen;
+
+        int a = -1;
 
         public Ellipse(bool _cp)
         {
@@ -21,11 +23,12 @@ namespace HciDrawingProgram.Drawables
 
         public override void Update(int x, int y, Point prevPoint)
         {
-            if (start.X == -1 && start.Y == -1)
+            if (a == -1)
             {
                 start = new Point(x, y);
+                a = 1;
             }
-            else if (start.X != -1 && start.Y != -1)
+            else if (a != -1)
             {
                 end = new Point(x, y);
 
@@ -60,11 +63,11 @@ namespace HciDrawingProgram.Drawables
                     g.Graphics.DrawEllipse(pen, end.X, end.Y, start.X - end.X, start.Y - end.Y);
             }
         }
-        public override void MouseDown(Pen _pen)
+        public override void LeftMouseDown(Pen _pen)
         {
             pen = new Pen(_pen.Color, _pen.Width);
         }
-        public override void MouseUp() { }
+        public override void LeftMouseUp() { }
         public override void ConstrainProportions()
         {
             constrainProportions = !constrainProportions;

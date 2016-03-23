@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace HciDrawingProgram
 {
-    enum DrawMode
+    public enum DrawMode
     {
         freehand,
         line,
         rectangle,
         ellipse,
+        polygon,
         move
     }
 }

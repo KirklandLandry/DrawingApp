@@ -31,10 +31,10 @@ namespace HciDrawingProgram.Drawables
                 if (start.X != -1 && start.Y != -1)
                     g.Graphics.DrawLine(pen, start, end);
         }
-        public override void MouseDown(Pen _pen) 
+        public override void LeftMouseDown(Pen _pen) 
         {
             pen = new Pen(_pen.Color, _pen.Width);
         }
-        public override void MouseUp() { }
+        public override void LeftMouseUp() { }
     }
 }

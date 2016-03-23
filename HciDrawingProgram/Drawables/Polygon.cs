@@ -7,31 +7,41 @@ using System.Threading.Tasks;
 
 namespace HciDrawingProgram.Drawables
 {
-    class Freehand : Drawable
+    class Polygon : Drawable
     {
-        public List<Point> freehandPath;
+        Point start = new Point(-1, -1);
+        Point end;
         Pen pen;
+
+        public Polygon()
+        {
+        }
+
         public override void Update(int x, int y, Point prevPoint)
         {
-            Point pt = new Point(x, y);
-            freehandPath.Add(prevPoint);
-            freehandPath.Add(pt);
+            if (start.X == -1 && start.Y == -1)
+            {
+                start = new Point(x, y);
+            }
+            else if (start.X != -1 && start.Y != -1)
+            {
+                end = new Point(x, y);
+
+            }
         }
 
         public override void Draw(System.Windows.Forms.PaintEventArgs g)
         {
-            if(freehandPath.ToArray().Length > 2)
-                g.Graphics.DrawLines(pen, freehandPath.ToArray());
-        }
 
-        public override void LeftMouseDown(Pen _pen) 
+        }
+        public override void LeftMouseDown(Pen _pen)
         {
             pen = new Pen(_pen.Color, _pen.Width);
-            freehandPath = new List<Point>();
         }
         public override void LeftMouseUp() 
-        { 
-        
+        {
+
         }
+
     }
 }
