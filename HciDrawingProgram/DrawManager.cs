@@ -32,7 +32,12 @@ namespace HciDrawingProgram
 
         }
 
-        public void MouseDown(DrawMode drawMode, bool constrainRectangle, bool constrainEllipse)
+        public void CreatePolygon(bool closedPolygon)
+        {
+            currentDrawable = new Polygon(closedPolygon);
+        }
+
+        public void LeftMouseDown(DrawMode drawMode, bool constrainRectangle, bool constrainEllipse)
         {
             mouseDown = true;
             if (layers[currentActiveIndex].render)
@@ -53,21 +58,35 @@ namespace HciDrawingProgram
                         currentDrawable = new Ellipse(constrainEllipse);
                         break;
                     case DrawMode.polygon:
-                        currentDrawable = new Polygon();
+                        
                         break;
                     case DrawMode.move:
 
                         break;
                 }
-                if (drawMode != DrawMode.move)
+                if (drawMode != DrawMode.move && currentDrawable != null)
                     currentDrawable.LeftMouseDown(leftClickPen);
+            }
+        }
+
+        public void RightMouseDown()
+        {
+            if (layers[currentActiveIndex].render && currentDrawable != null)
+            {
+                currentDrawable.RightMouseDown(leftClickPen);
+                layers[currentActiveIndex].AddDrawable(currentDrawable);
+                currentDrawable = null;
             }
         }
 
 
         public void MouseUp(DrawMode drawMode)
         {
-            if (layers[currentActiveIndex].render & drawMode != DrawMode.move)
+            if (layers[currentActiveIndex].render & drawMode == DrawMode.polygon && currentDrawable != null)
+            {
+                currentDrawable.LeftMouseUp();
+            }
+            else if (layers[currentActiveIndex].render & drawMode != DrawMode.move && currentDrawable != null)
             {
                 
                 currentDrawable.LeftMouseUp();
@@ -78,9 +97,14 @@ namespace HciDrawingProgram
             mouseDown = false;
         }
 
+
         public void MouseMove(MouseEventArgs e, DrawMode drawMode)
         {
-            if (mouseDown && (layers[currentActiveIndex].render) && drawMode != DrawMode.move)
+            if (drawMode == DrawMode.polygon && layers[currentActiveIndex].render && currentDrawable != null)
+            {
+                currentDrawable.Update(e.X, e.Y, prevPt);
+            }
+            else if (mouseDown && (layers[currentActiveIndex].render) && drawMode != DrawMode.move && currentDrawable != null)
             {
                 currentDrawable.Update(e.X, e.Y, prevPt);
                 //pictureBox1.Refresh();

@@ -46,6 +46,7 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.brushWidthSlider = new System.Windows.Forms.Label();
             this.moveButton = new System.Windows.Forms.Button();
+            this.polygonClosedCheckbox = new System.Windows.Forms.CheckBox();
             selectedColourLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -216,12 +217,26 @@
             this.moveButton.UseVisualStyleBackColor = true;
             this.moveButton.Click += new System.EventHandler(this.moveButton_Click);
             // 
+            // polygonClosedCheckbox
+            // 
+            this.polygonClosedCheckbox.AutoSize = true;
+            this.polygonClosedCheckbox.Checked = true;
+            this.polygonClosedCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.polygonClosedCheckbox.Location = new System.Drawing.Point(825, 134);
+            this.polygonClosedCheckbox.Name = "polygonClosedCheckbox";
+            this.polygonClosedCheckbox.Size = new System.Drawing.Size(57, 17);
+            this.polygonClosedCheckbox.TabIndex = 18;
+            this.polygonClosedCheckbox.Text = "closed";
+            this.polygonClosedCheckbox.UseVisualStyleBackColor = true;
+            this.polygonClosedCheckbox.CheckedChanged += new System.EventHandler(this.polygonClosedCheckbox_CheckedChanged);
+            // 
             // View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(956, 596);
+            this.Controls.Add(this.polygonClosedCheckbox);
             this.Controls.Add(this.moveButton);
             this.Controls.Add(this.brushWidthSlider);
             this.Controls.Add(this.polygonButton);
@@ -269,6 +284,7 @@
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label brushWidthSlider;
         private System.Windows.Forms.Button moveButton;
+        private System.Windows.Forms.CheckBox polygonClosedCheckbox;
     }
 }
 

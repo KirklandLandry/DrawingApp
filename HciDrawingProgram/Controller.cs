@@ -15,18 +15,17 @@ namespace HciDrawingProgram
 
         bool constrainEllipseProportions;
         bool constrainRectangleProportions;
-
+        bool closedPolygon;
 
         public Controller()
         {
             view = new View();
+            drawMode = DrawMode.freehand;
+            drawManager = new DrawManager();
 
             constrainEllipseProportions = false;
             constrainRectangleProportions = false;
-
-            drawMode = DrawMode.freehand;
-
-            drawManager = new DrawManager();
+            closedPolygon = true;
 
             InitializeViewEventHandlers();
 
@@ -36,15 +35,11 @@ namespace HciDrawingProgram
             a.visibleCheckBoxEvent += Layer_HandleVisibleCheckBoxEvent;
             view.AddLayer(drawManager.lastLayerAddedName, a);
 
-
-
             view.AddButtonColour(DrawMode.freehand, drawMode);
             view.SetLayerComboboxSelectedIndex(0);
             
             Application.Run(view);
-
         }
-
 
         private void InitializeViewEventHandlers()
         {
@@ -58,6 +53,7 @@ namespace HciDrawingProgram
             view.colourButton_ClickEvent += HandleColourButton1_Click;
             view.constrainRectangleProportionsCheckbox_CheckedChangedEvent += HandleConstrainRectangleProportionsCheckbox_CheckedChanged;
             view.constrainEllipseProportionsCheckbox_CheckedChangedEvent += HandleConstrainEllipseProportionsCheckbox_CheckedChanged;
+            view.polygonClosedCheckbox_CheckedChangedEvent += HandlePolygonClosedCheckbox_CheckedChangedEvent;
             view.layerCombobox_SelectedIndexChangedEvent += HandleLayerCombobox_SelectedIndexChanged;
             view.canvas_MouseDownEvent += HandleCanvas_MouseDownEvent;
             view.canvas_MouseUpEvent += HandleCanvas_MouseUpEvent;
@@ -65,12 +61,10 @@ namespace HciDrawingProgram
             view.canvas_PaintEvent += HandleCanvas_PaintEvent;
         }
 
-
-
+        #region EVENT HANDLERS
         private void HandleFreehandButton_Click(object sender, EventArgs e)
         {
             drawMode = view.Update(DrawMode.freehand, drawMode);
-
         }
 
         private void HandleLineButton_Click(object sender, EventArgs e)
@@ -91,6 +85,7 @@ namespace HciDrawingProgram
         private void HandlePolygonButton_Click(object sender, EventArgs e)
         {
             drawMode = view.Update(DrawMode.polygon, drawMode);
+            drawManager.CreatePolygon(closedPolygon);
         }
 
         private void HandleMoveButton_Click(object sender, EventArgs e)
@@ -106,17 +101,13 @@ namespace HciDrawingProgram
             a.listenOnDeleteLayerButton_Click += Layer_Handle_DeleteLayerButton_ClickEvent;
             a.visibleCheckBoxEvent += Layer_HandleVisibleCheckBoxEvent;
             view.AddLayer(drawManager.lastLayerAddedName, a);
-
             view.SetLayerComboboxSelectedIndex(drawManager.currentActiveIndex);
-
         }
 
         private void HandleColourButton1_Click(object sender, EventArgs e)
         {
             drawManager.leftClickPen.Color = view.GetColorDialogColor();
-            
         }
-
 
         private void HandleConstrainRectangleProportionsCheckbox_CheckedChanged(object sender, EventArgs e)
         {
@@ -126,7 +117,11 @@ namespace HciDrawingProgram
         private void HandleConstrainEllipseProportionsCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             constrainEllipseProportions = !constrainEllipseProportions;
+        }
 
+        private void HandlePolygonClosedCheckbox_CheckedChangedEvent(object sender, EventArgs e)
+        {
+            closedPolygon = !closedPolygon;
         }
 
         private void HandleLayerCombobox_SelectedIndexChanged(object sender, EventArgs e)
@@ -137,14 +132,17 @@ namespace HciDrawingProgram
         private void HandleCanvas_MouseDownEvent(object sender, MouseEventArgs e)
         {
             if (e.Button.Equals(MouseButtons.Left))
-                drawManager.MouseDown(drawMode, constrainRectangleProportions, constrainEllipseProportions);
-
+                drawManager.LeftMouseDown(drawMode, constrainRectangleProportions, constrainEllipseProportions);
+            if (e.Button.Equals(MouseButtons.Right))
+            {
+                drawManager.RightMouseDown();
+            }  
         }
 
         private void HandleCanvas_MouseUpEvent(object sender, MouseEventArgs e)
         {
-                if (e.Button.Equals(MouseButtons.Left)) 
-            drawManager.MouseUp(drawMode);
+            if (e.Button.Equals(MouseButtons.Left)) 
+                drawManager.MouseUp(drawMode);
         }
 
         private void HandleCanvas_MouseMoveEvent(object sender, MouseEventArgs e)
@@ -158,18 +156,10 @@ namespace HciDrawingProgram
             drawManager.Paint(e);
         }
 
-        /*private void Handle_DeleteLayerButton_ClickEvent(object sender, PaintEventArgs e)
-        {
-            drawManager.DeleteLayer();
-            view.RefreshView();
-        }*/
-
-
         void Layer_HandleVisibleCheckBoxEvent(object o, EventArgs e)
         {
             view.RefreshView();
         }
-
 
         void Layer_Handle_DeleteLayerButton_ClickEvent(object o, EventArgs e)
         {
@@ -180,6 +170,7 @@ namespace HciDrawingProgram
 
             view.RefreshView();
         }
+        #endregion
 
     }
 }

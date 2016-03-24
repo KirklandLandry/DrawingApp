@@ -33,5 +33,7 @@ namespace HciDrawingProgram.Drawables
         { 
         
         }
+        public override void RightMouseDown(Pen _pen) { }
+        public override void RightMouseUp() { }
     }
 }

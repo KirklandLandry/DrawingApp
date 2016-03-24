@@ -174,6 +174,13 @@ namespace HciDrawingProgram
                 constrainEllipseProportionsCheckbox_CheckedChangedEvent(this, EventArgs.Empty);
         }
 
+        public event EventHandler polygonClosedCheckbox_CheckedChangedEvent;
+        private void polygonClosedCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (polygonClosedCheckbox_CheckedChangedEvent != null)
+                polygonClosedCheckbox_CheckedChangedEvent(this, EventArgs.Empty);
+        }
+
         public event EventHandler layerCombobox_SelectedIndexChangedEvent;
         private void layerCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -216,8 +223,7 @@ namespace HciDrawingProgram
         private void canvas_Paint(object sender, PaintEventArgs e)
         {
             if (canvas_PaintEvent != null)
-                canvas_PaintEvent(this, e);
-            
+                canvas_PaintEvent(this, e);        
         }
 
 
@@ -287,20 +293,12 @@ namespace HciDrawingProgram
         #endregion 
 
 
-
-
-
-
-
-
-
-
-
-
         public void RefreshView()
         {
             canvas.Refresh();
         }
+
+
 
 
 

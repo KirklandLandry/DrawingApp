@@ -68,6 +68,8 @@ namespace HciDrawingProgram.Drawables
             pen = new Pen(_pen.Color, _pen.Width);
         }
         public override void LeftMouseUp() { }
+        public override void RightMouseDown(Pen _pen) { }
+        public override void RightMouseUp() { }
         public override void ConstrainProportions()
         {
             constrainProportions = !constrainProportions;

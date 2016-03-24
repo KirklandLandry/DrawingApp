@@ -15,6 +15,8 @@ namespace HciDrawingProgram
         public virtual void Update(int x, int y, Point prevPoint) { }
         public virtual void LeftMouseDown(Pen _pen) { }
         public virtual void LeftMouseUp() { }
+        public virtual void RightMouseDown(Pen _pen) { }
+        public virtual void RightMouseUp() { }
         public virtual void ConstrainProportions() { }
     }
 }
