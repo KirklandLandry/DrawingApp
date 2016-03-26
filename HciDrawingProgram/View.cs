@@ -14,35 +14,22 @@ namespace HciDrawingProgram
     public partial class View : Form
     {
 
-        // BUG: most recent object drawn sometimes gets messed up on the layers
-        // disappears or not on any layer
-        // or on the wrong layer (draw, add layer -> it's on the new layer)
-        // this must be because of the add order 
-
-        
-
-        
         public View()
         {
             InitializeComponent();
             
             freehandButton.BackColor = Color.LightSeaGreen;
-
-
-            
-            
+  
             canvas.Image = new Bitmap(canvas.Width, canvas.Height);
-
-
-            
 
             colourButton.BackColor = Color.Black;
 
+            SetupFlowLayoutPanel();
 
-            
-            //
+        }
 
-
+        private void SetupFlowLayoutPanel()
+        {
             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
             flowLayoutPanel1.AutoScroll = true;
             flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.None;

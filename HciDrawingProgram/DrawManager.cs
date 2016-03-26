@@ -19,6 +19,9 @@ namespace HciDrawingProgram
         int layerCount;
         bool mouseDown;
 
+        int movementIdCounter;
+        Point drawableCurrentlyBeingMoved; // this stores the layer its in (x) and the drawable in the layer's drawables array (y)
+
         public Pen leftClickPen = new Pen(System.Drawing.Color.Black, 4);
         Point prevPt;
 
@@ -29,7 +32,19 @@ namespace HciDrawingProgram
             currentActiveIndex = 0;
             layerCount = 0;
             mouseDown = false;
+            movementIdCounter = 0;
+            drawableCurrentlyBeingMoved = new Point(-1, -1);
+        }
 
+        public void ChangeMinMaxBoxDraw(bool s)
+        {
+            for (int n = 0; n < layers.Count; n++)
+            {
+                for (int i = 0; i < layers[n].GetDrawablesCount(); i++)
+                {
+                    layers[n].GetDrawable(i).SetDrawMinMaxBoxes(s);
+                }
+            }
         }
 
         public void CreatePolygon(bool closedPolygon)
@@ -37,7 +52,7 @@ namespace HciDrawingProgram
             currentDrawable = new Polygon(closedPolygon);
         }
 
-        public void LeftMouseDown(DrawMode drawMode, bool constrainRectangle, bool constrainEllipse)
+        public void LeftMouseDown(DrawMode drawMode, bool constrainRectangle, bool constrainEllipse, MouseEventArgs e)
         {
             mouseDown = true;
             if (layers[currentActiveIndex].render)
@@ -46,7 +61,7 @@ namespace HciDrawingProgram
                 switch (drawMode)
                 {
                     case DrawMode.freehand:
-                        currentDrawable = new Freehand();
+                        currentDrawable = new Freehand(movementIdCounter++);
                         break;
                     case DrawMode.line:
                         currentDrawable = new Line();
@@ -61,7 +76,7 @@ namespace HciDrawingProgram
                         
                         break;
                     case DrawMode.move:
-
+                        SelectDrawableToMove(e);
                         break;
                 }
                 if (drawMode != DrawMode.move && currentDrawable != null)
@@ -69,11 +84,38 @@ namespace HciDrawingProgram
             }
         }
 
-        public void RightMouseDown()
+        private void SelectDrawableToMove(MouseEventArgs e)
         {
-            if (layers[currentActiveIndex].render && currentDrawable != null)
+            int _id = -1;
+            drawableCurrentlyBeingMoved.X = -1;
+            drawableCurrentlyBeingMoved.Y = -1;
+
+            for (int n = 0; n < layers.Count; n++)
+            {
+                for (int i = 0; i < layers[n].GetDrawablesCount(); i++)
+                {
+                    Rectangle shapeBounds = layers[n].GetDrawable(i).minMaxRect;
+
+                    if(e.X > shapeBounds.X && e.X < shapeBounds.X + shapeBounds.Width &&
+                        e.Y > shapeBounds.Y && e.Y < shapeBounds.Y + shapeBounds.Height)
+                    {
+                        if (layers[n].GetDrawable(i).id > _id)
+                        {
+                            _id = layers[n].GetDrawable(i).id;
+                            drawableCurrentlyBeingMoved.X = n;
+                            drawableCurrentlyBeingMoved.Y = i;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void RightMouseDown(DrawMode drawMode)
+        {
+            if (layers[currentActiveIndex].render && currentDrawable != null && drawMode == DrawMode.polygon)
             {
                 currentDrawable.RightMouseDown(leftClickPen);
+                currentDrawable.SetMinMaxPoints();
                 layers[currentActiveIndex].AddDrawable(currentDrawable);
                 currentDrawable = null;
             }
@@ -82,25 +124,37 @@ namespace HciDrawingProgram
 
         public void MouseUp(DrawMode drawMode)
         {
-            if (layers[currentActiveIndex].render & drawMode == DrawMode.polygon && currentDrawable != null)
+            if (drawMode == DrawMode.move)
+            {
+                drawableCurrentlyBeingMoved.X = -1;
+                drawableCurrentlyBeingMoved.Y = -1;
+            }
+            else if (layers[currentActiveIndex].render && drawMode == DrawMode.polygon && currentDrawable != null)
             {
                 currentDrawable.LeftMouseUp();
             }
-            else if (layers[currentActiveIndex].render & drawMode != DrawMode.move && currentDrawable != null)
+            else if (layers[currentActiveIndex].render && drawMode != DrawMode.move && currentDrawable != null)
             {
                 
                 currentDrawable.LeftMouseUp();
                 //drawables.Add(currentDrawable);
                 layers[currentActiveIndex].AddDrawable(currentDrawable);
+                currentDrawable.SetMinMaxPoints();
                 currentDrawable = null;
             }
             mouseDown = false;
         }
 
-
         public void MouseMove(MouseEventArgs e, DrawMode drawMode)
         {
-            if (drawMode == DrawMode.polygon && layers[currentActiveIndex].render && currentDrawable != null)
+            if(drawableCurrentlyBeingMoved.X != -1 && drawableCurrentlyBeingMoved.Y != -1)
+            {
+                int movX = e.X - prevPt.X;
+                int movY = e.Y - prevPt.Y;
+                int a = drawableCurrentlyBeingMoved.X;
+                layers[a].GetDrawable(drawableCurrentlyBeingMoved.Y).Move(movX, movY);
+            }
+            else if (drawMode == DrawMode.polygon && layers[currentActiveIndex].render && currentDrawable != null)
             {
                 currentDrawable.Update(e.X, e.Y, prevPt);
             }

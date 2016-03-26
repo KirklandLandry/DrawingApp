@@ -86,5 +86,9 @@ namespace HciDrawingProgram.Drawables
         }
         public override void RightMouseUp() { }
 
+        public override void SetMinMaxPoints() 
+        { 
+
+        }
     }
 }

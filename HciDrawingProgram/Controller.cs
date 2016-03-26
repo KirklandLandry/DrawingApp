@@ -64,33 +64,52 @@ namespace HciDrawingProgram
         #region EVENT HANDLERS
         private void HandleFreehandButton_Click(object sender, EventArgs e)
         {
+            if(drawMode == DrawMode.move)
+                drawManager.ChangeMinMaxBoxDraw(false);
             drawMode = view.Update(DrawMode.freehand, drawMode);
+            view.RefreshView();
         }
 
         private void HandleLineButton_Click(object sender, EventArgs e)
         {
+            if (drawMode == DrawMode.move)
+                drawManager.ChangeMinMaxBoxDraw(false);
             drawMode = view.Update(DrawMode.line, drawMode);
+            view.RefreshView();
         }
 
         private void HandleRectangleButton_Click(object sender, EventArgs e)
         {
+            if (drawMode == DrawMode.move)
+                drawManager.ChangeMinMaxBoxDraw(false);
             drawMode = view.Update(DrawMode.rectangle, drawMode);
+            view.RefreshView();
         }
 
         private void HandleEllipseButton_Click(object sender, EventArgs e)
         {
+            if (drawMode == DrawMode.move)
+                drawManager.ChangeMinMaxBoxDraw(false);
             drawMode = view.Update(DrawMode.ellipse, drawMode);
+            view.RefreshView();
         }
 
         private void HandlePolygonButton_Click(object sender, EventArgs e)
         {
+            if (drawMode == DrawMode.move)
+                drawManager.ChangeMinMaxBoxDraw(false);
             drawMode = view.Update(DrawMode.polygon, drawMode);
             drawManager.CreatePolygon(closedPolygon);
+            view.RefreshView();
         }
 
         private void HandleMoveButton_Click(object sender, EventArgs e)
         {
+            drawManager.ChangeMinMaxBoxDraw(true);
             drawMode = view.Update(DrawMode.move, drawMode);
+            //if (drawMode != DrawMode.move)
+            //drawManager.ChangeMinMaxBoxDraw(true);
+            view.RefreshView();
         }
 
         private void HandleAddLayerButton_Click(object sender, EventArgs e)
@@ -132,11 +151,9 @@ namespace HciDrawingProgram
         private void HandleCanvas_MouseDownEvent(object sender, MouseEventArgs e)
         {
             if (e.Button.Equals(MouseButtons.Left))
-                drawManager.LeftMouseDown(drawMode, constrainRectangleProportions, constrainEllipseProportions);
+                drawManager.LeftMouseDown(drawMode, constrainRectangleProportions, constrainEllipseProportions, e);
             if (e.Button.Equals(MouseButtons.Right))
-            {
-                drawManager.RightMouseDown();
-            }  
+                drawManager.RightMouseDown(drawMode);
         }
 
         private void HandleCanvas_MouseUpEvent(object sender, MouseEventArgs e)

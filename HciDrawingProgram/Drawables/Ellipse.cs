@@ -74,6 +74,10 @@ namespace HciDrawingProgram.Drawables
         {
             constrainProportions = !constrainProportions;
         }
-
+        public override void SetMinMaxPoints()
+        {
+            base.topLeft = start;
+            base.bottomRight = end;
+        }
     }
 }

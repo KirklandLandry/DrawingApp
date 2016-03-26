@@ -38,5 +38,9 @@ namespace HciDrawingProgram.Drawables
         public override void LeftMouseUp() { }
         public override void RightMouseDown(Pen _pen) { }
         public override void RightMouseUp() { }
+        public override void SetMinMaxPoints()
+        {
+
+        }
     }
 }
