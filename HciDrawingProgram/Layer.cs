@@ -46,6 +46,10 @@ namespace HciDrawingProgram
         {
             drawables.Add(drawable);
         }
+        public void RemoveDrawable(int index)
+        {
+            drawables.RemoveAt(index);
+        }
         public Drawable GetDrawable(int i)
         {
             return drawables[i];

@@ -286,6 +286,16 @@ namespace HciDrawingProgram
         }
 
 
+        public event KeyEventHandler view_KeyDownEvent;
+
+        private void View_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (view_KeyDownEvent != null)
+                view_KeyDownEvent(this, e);
+        }
+
+
+
 
 
 

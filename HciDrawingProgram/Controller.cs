@@ -59,6 +59,8 @@ namespace HciDrawingProgram
             view.canvas_MouseUpEvent += HandleCanvas_MouseUpEvent;
             view.canvas_MouseMoveEvent += HandleCanvas_MouseMoveEvent;
             view.canvas_PaintEvent += HandleCanvas_PaintEvent;
+            view.view_KeyDownEvent += View_Handle_KeyDownEvent;
+            //view.canvas_KeyPreviewDownEvent += View_Handle_KeyDownEvent;
         }
 
         #region EVENT HANDLERS
@@ -184,9 +186,18 @@ namespace HciDrawingProgram
             if (index != -1)
                 view.RemoveLayer(index);
             view.SetLayerComboboxSelectedIndex(drawManager.currentActiveIndex);
-
             view.RefreshView();
         }
+
+        void View_Handle_KeyDownEvent(object o, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.X)
+                drawManager.Cut();
+            if(e.KeyCode == Keys.V)
+                drawManager.Paste();
+            view.RefreshView();
+        }
+
         #endregion
 
     }

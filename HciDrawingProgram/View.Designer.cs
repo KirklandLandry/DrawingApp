@@ -135,6 +135,7 @@
             // 
             // layerCombobox
             // 
+            this.layerCombobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.layerCombobox.FormattingEnabled = true;
             this.layerCombobox.Location = new System.Drawing.Point(742, 248);
             this.layerCombobox.Name = "layerCombobox";
@@ -256,8 +257,10 @@
             this.Controls.Add(this.trackBar1);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
             this.Name = "View";
             this.Text = "Drawing App";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.View_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);

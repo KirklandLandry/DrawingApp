@@ -47,6 +47,8 @@ namespace HciDrawingProgram.Drawables
         {
             if (points.ToArray().Length >= 2)
                 g.Graphics.DrawLines(pen, points.ToArray());
+            if (base.drawMinMaxBoxes)
+                g.Graphics.DrawRectangle(base.grayPen, base.minMaxRect);
         }
 
 
@@ -87,8 +89,41 @@ namespace HciDrawingProgram.Drawables
         public override void RightMouseUp() { }
 
         public override void SetMinMaxPoints() 
-        { 
+        {
+            int minX = points[0].X;
+            int minY = points[0].Y;
+            int maxX = points[0].X;
+            int maxY = points[0].Y;
 
+            for (int i = 1; i < points.Count(); i++)
+            {
+                if (points[i].X < minX)
+                    minX = points[i].X;
+                if (points[i].Y < minY)
+                    minY = points[i].Y;
+                if (points[i].X > maxX)
+                    maxX = points[i].X;
+                if (points[i].Y > maxY)
+                    maxY = points[i].Y;
+            }
+            base.topLeft = new Point(minX, minY);
+            base.bottomRight = new Point(maxX, maxY);
+            base.minMaxRect = new Rectangle(base.topLeft.X, base.topLeft.Y, Math.Abs(base.bottomRight.X - base.topLeft.X), Math.Abs(base.bottomRight.Y - base.topLeft.Y));
+
+        }
+
+        public override void SetDrawMinMaxBoxes(bool s)
+        {
+            base.drawMinMaxBoxes = s;
+        }
+
+        public override void Move(int movX, int movY)
+        {
+            for (int i = 0; i < points.Count(); i++)
+            {
+                points[i] = new Point(points[i].X + movX, points[i].Y + movY);
+                SetMinMaxPoints();
+            }
         }
     }
 }

@@ -69,6 +69,8 @@ namespace HciDrawingProgram.Drawables
                 else if (end.X < start.X && end.Y < start.Y)
                     g.Graphics.DrawRectangle(pen, end.X, end.Y, start.X - end.X, start.Y - end.Y);
             }
+            if (base.drawMinMaxBoxes)
+                g.Graphics.DrawRectangle(base.grayPen, base.minMaxRect);
         }
         public override void LeftMouseDown(Pen _pen)
         {
@@ -84,8 +86,46 @@ namespace HciDrawingProgram.Drawables
         }
         public override void SetMinMaxPoints()
         {
-            base.topLeft = start;
-            base.bottomRight = end;
+            int minX;
+            int minY;
+            int maxX;
+            int maxY;
+
+            if (start.X < end.X)
+            {
+                minX = start.X;
+                maxX = end.X;
+            }
+            else
+            {
+                minX = end.X;
+                maxX = start.X;
+            }
+            if (start.Y < end.Y)
+            {
+                minY = start.Y;
+                maxY = end.Y;
+            }
+            else
+            {
+                minY = end.Y;
+                maxY = start.Y;
+            }
+            base.topLeft = new Point(minX, minY);
+            base.bottomRight = new Point(maxX, maxY);
+            base.minMaxRect = new Rectangle(base.topLeft.X, base.topLeft.Y, Math.Abs(base.bottomRight.X - base.topLeft.X), Math.Abs(base.bottomRight.Y - base.topLeft.Y));
+        }
+
+        public override void SetDrawMinMaxBoxes(bool s)
+        {
+            base.drawMinMaxBoxes = s;
+        }
+
+        public override void Move(int movX, int movY)
+        {
+            start = new Point(start.X + movX, start.Y + movY);
+            end = new Point(end.X + movX, end.Y + movY);
+            SetMinMaxPoints();
         }
 
     }

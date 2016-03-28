@@ -9,15 +9,16 @@ using System.Windows.Forms;
 
 namespace HciDrawingProgram
 {
-    class DrawManager
+    class DrawManager // only select / move objects that are on the layer you're on
     {
-        List<Drawable> drawables;
         List<Layer> layers;
         Drawable currentDrawable;
 
         public int currentActiveIndex;
         int layerCount;
         bool mouseDown;
+
+        Drawable storedDrawable; // for copy paste
 
         int movementIdCounter;
         Point drawableCurrentlyBeingMoved; // this stores the layer its in (x) and the drawable in the layer's drawables array (y)
@@ -27,7 +28,6 @@ namespace HciDrawingProgram
 
         public DrawManager()
         {
-            drawables = new List<Drawable>();
             layers = new List<Layer>();
             currentActiveIndex = 0;
             layerCount = 0;
@@ -44,6 +44,30 @@ namespace HciDrawingProgram
                 {
                     layers[n].GetDrawable(i).SetDrawMinMaxBoxes(s);
                 }
+            }
+        }
+
+        public void Cut()
+        {
+            if (drawableCurrentlyBeingMoved.X != -1 && drawableCurrentlyBeingMoved.Y != -1)
+            {
+                Console.WriteLine("cut");
+                storedDrawable = layers[drawableCurrentlyBeingMoved.X].GetDrawable(drawableCurrentlyBeingMoved.Y);
+                layers[drawableCurrentlyBeingMoved.X].RemoveDrawable(drawableCurrentlyBeingMoved.Y);
+                drawableCurrentlyBeingMoved.X = -1;
+                drawableCurrentlyBeingMoved.Y = -1;
+            }
+        }
+
+        public void Paste()
+        {
+            if(storedDrawable != null)
+            {
+                Console.WriteLine("paste");
+                Drawable temp = storedDrawable;
+                temp.id = movementIdCounter++;
+                layers[currentActiveIndex].AddDrawable(temp);
+                storedDrawable = null;
             }
         }
 
@@ -117,7 +141,7 @@ namespace HciDrawingProgram
                 currentDrawable.RightMouseDown(leftClickPen);
                 currentDrawable.SetMinMaxPoints();
                 layers[currentActiveIndex].AddDrawable(currentDrawable);
-                currentDrawable = null;
+                CreatePolygon(true);// CreatePolygon(bool closedPolygon)
             }
         }
 
@@ -135,7 +159,6 @@ namespace HciDrawingProgram
             }
             else if (layers[currentActiveIndex].render && drawMode != DrawMode.move && currentDrawable != null)
             {
-                
                 currentDrawable.LeftMouseUp();
                 //drawables.Add(currentDrawable);
                 layers[currentActiveIndex].AddDrawable(currentDrawable);
@@ -161,7 +184,6 @@ namespace HciDrawingProgram
             else if (mouseDown && (layers[currentActiveIndex].render) && drawMode != DrawMode.move && currentDrawable != null)
             {
                 currentDrawable.Update(e.X, e.Y, prevPt);
-                //pictureBox1.Refresh();
             }
             prevPt = new Point(e.X, e.Y);
         }
@@ -209,9 +231,7 @@ namespace HciDrawingProgram
                             currentActiveIndex = 0;//++;
                         else
                             currentActiveIndex--;
-                        //layerCount--;
                         return i;
-                        //pictureBox1.Refresh();
                     }
                 }
             }
@@ -225,8 +245,6 @@ namespace HciDrawingProgram
             currentActiveIndex = selectedComboboxIndex;
         }
 
-
-
         public string lastLayerAddedName;
         public Layer addLayer(string name)
         {
@@ -239,7 +257,6 @@ namespace HciDrawingProgram
 
             layers[currentActiveIndex].currentActiveLayer = false;
             currentActiveIndex = layers.Count - 1;
-
 
             return a;
         }

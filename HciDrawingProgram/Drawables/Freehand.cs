@@ -68,7 +68,7 @@ namespace HciDrawingProgram.Drawables
             }
             base.topLeft = new Point(minX, minY);
             base.bottomRight = new Point(maxX, maxY);
-            minMaxRect = new Rectangle(base.topLeft.X, base.topLeft.Y, Math.Abs(base.bottomRight.X - base.topLeft.X), Math.Abs(base.bottomRight.Y - base.topLeft.Y));
+            base.minMaxRect = new Rectangle(base.topLeft.X, base.topLeft.Y, Math.Abs(base.bottomRight.X - base.topLeft.X), Math.Abs(base.bottomRight.Y - base.topLeft.Y));
 
         }
         public override void SetDrawMinMaxBoxes(bool s) 
