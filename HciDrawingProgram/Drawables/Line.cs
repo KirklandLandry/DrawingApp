@@ -13,6 +13,11 @@ namespace HciDrawingProgram.Drawables
         Point end;
         Pen pen;
 
+        public Line(int _id)
+        {
+            base.id = _id;
+        }
+
         public override void Update(int x, int y, Point prevPoint)
         {
             if (start.X == -1 && start.Y == -1)

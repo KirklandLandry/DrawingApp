@@ -71,9 +71,16 @@ namespace HciDrawingProgram
             }
         }
 
-        public void CreatePolygon(bool closedPolygon)
+        bool isClosedPolygon;
+        public void ChangePolygonClosure(bool b)
         {
-            currentDrawable = new Polygon(closedPolygon);
+            isClosedPolygon = b;
+            currentDrawable = new Polygon(isClosedPolygon, movementIdCounter++);
+        }
+
+        public void CreatePolygon()
+        {
+            currentDrawable = new Polygon(isClosedPolygon, movementIdCounter++);
         }
 
         public void LeftMouseDown(DrawMode drawMode, bool constrainRectangle, bool constrainEllipse, MouseEventArgs e)
@@ -88,13 +95,13 @@ namespace HciDrawingProgram
                         currentDrawable = new Freehand(movementIdCounter++);
                         break;
                     case DrawMode.line:
-                        currentDrawable = new Line();
+                        currentDrawable = new Line(movementIdCounter++);
                         break;
                     case DrawMode.rectangle:
-                        currentDrawable = new RectangleDrawable(constrainRectangle);
+                        currentDrawable = new RectangleDrawable(constrainRectangle, movementIdCounter++);
                         break;
                     case DrawMode.ellipse:
-                        currentDrawable = new Ellipse(constrainEllipse);
+                        currentDrawable = new Ellipse(constrainEllipse, movementIdCounter++);
                         break;
                     case DrawMode.polygon:
                         
@@ -141,7 +148,7 @@ namespace HciDrawingProgram
                 currentDrawable.RightMouseDown(leftClickPen);
                 currentDrawable.SetMinMaxPoints();
                 layers[currentActiveIndex].AddDrawable(currentDrawable);
-                CreatePolygon(true);// CreatePolygon(bool closedPolygon)
+                CreatePolygon();
             }
         }
 
@@ -160,7 +167,6 @@ namespace HciDrawingProgram
             else if (layers[currentActiveIndex].render && drawMode != DrawMode.move && currentDrawable != null)
             {
                 currentDrawable.LeftMouseUp();
-                //drawables.Add(currentDrawable);
                 layers[currentActiveIndex].AddDrawable(currentDrawable);
                 currentDrawable.SetMinMaxPoints();
                 currentDrawable = null;
@@ -170,12 +176,19 @@ namespace HciDrawingProgram
 
         public void MouseMove(MouseEventArgs e, DrawMode drawMode)
         {
-            if(drawableCurrentlyBeingMoved.X != -1 && drawableCurrentlyBeingMoved.Y != -1)
+            if(drawableCurrentlyBeingMoved.X != -1 && drawableCurrentlyBeingMoved.Y != -1 && mouseDown)
             {
-                int movX = e.X - prevPt.X;
-                int movY = e.Y - prevPt.Y;
-                int a = drawableCurrentlyBeingMoved.X;
-                layers[a].GetDrawable(drawableCurrentlyBeingMoved.Y).Move(movX, movY);
+                if(e.X > 0 && e.Y > 0 && e.X < 725 && e.Y < 572) // should pass in canvas size
+                {
+                    int movX = e.X - prevPt.X;
+                    int movY = e.Y - prevPt.Y;
+                    int a = drawableCurrentlyBeingMoved.X;
+                    layers[a].GetDrawable(drawableCurrentlyBeingMoved.Y).Move(movX, movY);
+                }
+                else
+                {
+                    mouseDown = false;
+                }
             }
             else if (drawMode == DrawMode.polygon && layers[currentActiveIndex].render && currentDrawable != null)
             {
@@ -214,7 +227,7 @@ namespace HciDrawingProgram
 
         public int DeleteLayer()
         {
-            if (layers.Count <= 1) // this isn't really working. need to change all this indexing stuff to be less messy
+            if (layers.Count <= 1) 
             {
                 // can't delete the only layer
             }
@@ -228,7 +241,7 @@ namespace HciDrawingProgram
                         // call the layer's DestroyEvent() function
                         layers.RemoveAt(i);
                         if (currentActiveIndex == 0)
-                            currentActiveIndex = 0;//++;
+                            currentActiveIndex = 0;
                         else
                             currentActiveIndex--;
                         return i;

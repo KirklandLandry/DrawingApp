@@ -37,7 +37,9 @@ namespace HciDrawingProgram
 
             view.AddButtonColour(DrawMode.freehand, drawMode);
             view.SetLayerComboboxSelectedIndex(0);
-            
+
+            drawManager.ChangePolygonClosure(closedPolygon);
+
             Application.Run(view);
         }
 
@@ -101,7 +103,7 @@ namespace HciDrawingProgram
             if (drawMode == DrawMode.move)
                 drawManager.ChangeMinMaxBoxDraw(false);
             drawMode = view.Update(DrawMode.polygon, drawMode);
-            drawManager.CreatePolygon(closedPolygon);
+            drawManager.CreatePolygon();
             view.RefreshView();
         }
 
@@ -143,6 +145,7 @@ namespace HciDrawingProgram
         private void HandlePolygonClosedCheckbox_CheckedChangedEvent(object sender, EventArgs e)
         {
             closedPolygon = !closedPolygon;
+            drawManager.ChangePolygonClosure(closedPolygon);
         }
 
         private void HandleLayerCombobox_SelectedIndexChanged(object sender, EventArgs e)

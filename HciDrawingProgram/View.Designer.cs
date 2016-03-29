@@ -198,6 +198,7 @@
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(104, 45);
             this.trackBar1.TabIndex = 15;
+            this.trackBar1.Visible = false;
             // 
             // brushWidthSlider
             // 
@@ -207,6 +208,7 @@
             this.brushWidthSlider.Size = new System.Drawing.Size(61, 13);
             this.brushWidthSlider.TabIndex = 16;
             this.brushWidthSlider.Text = "brush width";
+            this.brushWidthSlider.Visible = false;
             // 
             // moveButton
             // 

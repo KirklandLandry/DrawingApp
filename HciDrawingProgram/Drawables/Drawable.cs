@@ -9,8 +9,6 @@ namespace HciDrawingProgram
 {
     public class Drawable
     {
-
-
         public Pen grayPen = new Pen(Color.SlateGray, 1);
         public int id;
         public Point topLeft, bottomRight;

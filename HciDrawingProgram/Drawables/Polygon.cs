@@ -18,11 +18,12 @@ namespace HciDrawingProgram.Drawables
         bool active;
         bool isClosed;
 
-        public Polygon(bool closedPolygon)
+        public Polygon(bool closedPolygon, int _id)
         {
             active = true;
             points = new List<Point>();
             isClosed = closedPolygon;
+            base.id = _id;
         }
 
         public override void Update(int x, int y, Point prevPoint)
@@ -46,7 +47,11 @@ namespace HciDrawingProgram.Drawables
         public override void Draw(System.Windows.Forms.PaintEventArgs g)
         {
             if (points.ToArray().Length >= 2)
+            {
                 g.Graphics.DrawLines(pen, points.ToArray());
+                if(active)
+                    g.Graphics.DrawLine(pen, points.ToArray()[points.Count()-1], current);
+            }
             if (base.drawMinMaxBoxes)
                 g.Graphics.DrawRectangle(base.grayPen, base.minMaxRect);
         }
@@ -79,12 +84,29 @@ namespace HciDrawingProgram.Drawables
 
         public override void RightMouseDown(Pen _pen) 
         {
-
-            points.Add(start);
-            end = previous;
-            points.Add(end);
-            active = false;
-
+            if (active)
+            {
+                if(points.Count() <2)
+                {
+                    points.Add(current);
+                    points.Add(current);
+                    pen = _pen;
+                    active = false;
+                }
+                else if (isClosed)
+                {
+                    points.Add(start);
+                    end = previous;
+                    points.Add(end);
+                    active = false;
+                }
+                else
+                {
+                    //points.Add(current);
+                    //points.Add(current);
+                    active = false;
+                }
+            }
         }
         public override void RightMouseUp() { }
 

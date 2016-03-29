@@ -16,9 +16,10 @@ namespace HciDrawingProgram.Drawables
 
         int a = -1;
 
-        public Ellipse(bool _cp)
+        public Ellipse(bool _cp, int _id)
         {
             constrainProportions = _cp;
+            base.id = _id;
         }
 
         public override void Update(int x, int y, Point prevPoint)
@@ -31,7 +32,6 @@ namespace HciDrawingProgram.Drawables
             else if (a != -1)
             {
                 end = new Point(x, y);
-
             }
         }
 
@@ -39,28 +39,16 @@ namespace HciDrawingProgram.Drawables
         {
             if (constrainProportions)
             {
-
                 double xDist = end.X - start.X;
-                double yDist = end.Y - start.Y;
-                if(xDist > yDist)
-                    g.Graphics.DrawEllipse(pen, start.X, start.Y, (float)xDist, (float)xDist);
-                else
-                    g.Graphics.DrawEllipse(pen, start.X, start.Y, (float)yDist, (float)yDist);
 
+                if (end.Y < start.Y)
+                    g.Graphics.DrawEllipse(pen, Math.Min(start.X, end.X), start.Y - Math.Abs(end.X - start.X), Math.Abs(end.X - start.X), Math.Abs(end.X - start.X));
+                else
+                    g.Graphics.DrawEllipse(pen, Math.Min(start.X, end.X), Math.Min(start.Y, end.Y), Math.Abs(end.X - start.X), Math.Abs(end.X - start.X));
             }
             else if (start.X != -1 && start.Y != -1)
             {
-                if (end.X > start.X && end.Y > start.Y)
-                    g.Graphics.DrawEllipse(pen, start.X, start.Y, end.X - start.X, end.Y - start.Y);
-
-                else if (end.X < start.X && end.Y > start.Y)
-                    g.Graphics.DrawEllipse(pen, end.X, start.Y, start.X - end.X, end.Y - start.Y);
-
-                else if (end.X > start.X && end.Y < start.Y)
-                    g.Graphics.DrawEllipse(pen, start.X, end.Y, end.X - start.X, start.Y - end.Y);
-
-                else if (end.X < start.X && end.Y < start.Y)
-                    g.Graphics.DrawEllipse(pen, end.X, end.Y, start.X - end.X, start.Y - end.Y);
+                g.Graphics.DrawEllipse(pen, Math.Min(start.X, end.X), Math.Min(start.Y, end.Y), Math.Abs(end.X - start.X), Math.Abs(end.Y - start.Y));
             }
             if (base.drawMinMaxBoxes)
                 g.Graphics.DrawRectangle(base.grayPen, base.minMaxRect);
@@ -82,30 +70,31 @@ namespace HciDrawingProgram.Drawables
             int minY;
             int maxX;
             int maxY;
+            Rectangle rect;
 
-            if (start.X < end.X)
+            if (constrainProportions)
             {
-                minX = start.X;
-                maxX = end.X;
+                if (end.Y < start.Y)
+                    rect = new Rectangle(Math.Min(start.X, end.X), start.Y - Math.Abs(end.X - start.X), Math.Abs(end.X - start.X), Math.Abs(end.X - start.X));
+                else
+                    rect = new Rectangle(Math.Min(start.X, end.X), Math.Min(start.Y, end.Y), Math.Abs(end.X - start.X), Math.Abs(end.X - start.X));
+
+                minX = rect.X;
+                maxX = rect.X + rect.Width;
+                minY = rect.Y;
+                maxY = rect.Y + rect.Height;
             }
             else
             {
-                minX = end.X;
-                maxX = start.X;
+                minX = Math.Min(start.X, end.X);
+                maxX = Math.Max(start.X, end.X);
+                minY = Math.Min(start.Y, end.Y);
+                maxY = Math.Max(start.Y, end.Y);
+                rect = new Rectangle(minX, minY, Math.Abs(maxX - minX), Math.Abs(maxY - minY));
             }
-            if (start.Y < end.Y)
-            {
-                minY = start.Y;
-                maxY = end.Y;
-            }
-            else
-            {
-                minY = end.Y;
-                maxY = start.Y;
-            }
-            base.topLeft = new Point(minX, minY);
-            base.bottomRight = new Point(maxX, maxY);
-            base.minMaxRect = new Rectangle(base.topLeft.X, base.topLeft.Y, Math.Abs(base.bottomRight.X - base.topLeft.X), Math.Abs(base.bottomRight.Y - base.topLeft.Y));
+            base.topLeft = new Point(rect.X, rect.Y);
+            base.bottomRight = new Point(rect.X + rect.Width, rect.Y + rect.Y);
+            base.minMaxRect = rect;
         }
         public override void SetDrawMinMaxBoxes(bool s)
         {

@@ -11,9 +11,6 @@ namespace HciDrawingProgram.Drawables
     {
         public List<Point> freehandPath;
 
-
-        //int id; // this id is assigned for movement. for movement pick the highest id
-
         public Freehand(int _id)
         {
             base.id = _id;
