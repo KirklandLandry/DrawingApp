@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HciDrawingProgram", "HciDrawingProgram\HciDrawingProgram.csproj", "{55CFAD67-05F6-4E21-B232-6EA65A999A02}"
-EndProject
-Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "ClassDiagram", "ModelingProject2\ClassDiagram.modelproj", "{1AED4FC1-6CEA-417C-885D-D6D5D0927436}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingApp", "HciDrawingProgram\DrawingApp.csproj", "{55CFAD67-05F6-4E21-B232-6EA65A999A02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{55CFAD67-05F6-4E21-B232-6EA65A999A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55CFAD67-05F6-4E21-B232-6EA65A999A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55CFAD67-05F6-4E21-B232-6EA65A999A02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AED4FC1-6CEA-417C-885D-D6D5D0927436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AED4FC1-6CEA-417C-885D-D6D5D0927436}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AED4FC1-6CEA-417C-885D-D6D5D0927436}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AED4FC1-6CEA-417C-885D-D6D5D0927436}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
